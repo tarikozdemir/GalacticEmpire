@@ -15,6 +15,8 @@ namespace Galaxy
         public Player? OccupiedBy { get; set; }
         public ConsoleColor Color{ get; set; } = ConsoleColor.White;
 
+        public override string ToString() => $"{Name} - {Position}";
+
         public Planet(string name, int spaceSize)
         {
             Name = name;

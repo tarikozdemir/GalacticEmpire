@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Galaxy;
+using Spectre.Console;
 
 internal class Program
 {
@@ -51,8 +52,7 @@ public class Game
         int playerCount = AskPlayerCount();
         for (int i = 0; i < playerCount; i++)
         {
-            Console.WriteLine($"What is the name of player {i + 1}?");
-            string playerName = Console.ReadLine()!;
+            string playerName = AnsiConsole.Ask<string>($"What is the [green]name[/] of player [bold]{i + 1}[/]?");
             var player = new Player(playerName, 100, 100, playerColors[i % playerColors.Length]);
             players.Add(player);
             UpdateSpace();  // Update grid with all player positions
@@ -124,7 +124,22 @@ public class Game
 
     private int AskPlayerCount()
     {
-        while (true)
+        return AnsiConsole.Prompt(
+        new TextPrompt<int>("How many players will play the game?")
+        .DefaultValue(2)
+        .PromptStyle("green")
+        .ValidationErrorMessage("[red]That's not a valid count[/]")
+        .Validate(age =>
+        {
+            return age switch
+            {
+                <= 1 => ValidationResult.Error("[red]There must at least be 2 players[/]"),
+                >= 6 => ValidationResult.Error("[red]There must at most be 5 players[/]"),
+                _ => ValidationResult.Success(),
+            };
+        }));
+
+        /*while (true)
         {
             Console.WriteLine("How many players will play the game?");
             if (int.TryParse(Console.ReadLine(), out int playerCount) && playerCount >= 2)
@@ -133,7 +148,7 @@ public class Game
             }
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("Invalid input. Player count cannot be less than 2.");
-        }
+        }*/
     }
 
     private void DisplayPlayerStatus(Player player)
@@ -155,24 +170,71 @@ public class Game
             {
                 if (!player.IsAlive) continue;
 
-                Console.ForegroundColor = player.Color;  // Set text color to player specific color
+                // Ask for the user's favorite fruit
+                var input = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                    .Title($"[{player.Color.ToString().ToLower()}]{player.Name}, What do you want to do?[/]")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more fruits)[/]")
+                    .AddChoices(new[]
+                    {
+                        "Send Fleet", "Call Back Fleet", "Fleet Options",
+                    }));
+
+                switch (input)
+                {
+                    case "Send Fleet":
+                        {
+                            Planet target = SelectTargetPlanet(player);
+                            if (target.OccupiedBy == null || target.OccupiedBy == player)
+                            {
+                                SendFleet(player, target);
+                            }
+                            break;
+                        }
+                    case "Call Back Fleet":
+                        {
+                            Planet target = SelectTargetPlanet(player);
+                            CallBackFleet(player, target);
+                            break;
+                        }
+
+                    case "Fleet Options":
+                        {
+                            // Work in progress
+                            break;
+                        }
+                    default: break;
+                }
+
+                UpdateSpace();  // Update space after fleet action
+                DisplaySpace();  // Display space
+
+                /* Console.ForegroundColor = player.Color;  // Set text color to player specific color
                 Console.WriteLine("-------------------------------------------------");
-                Console.WriteLine($"{player.Name}, What do you want to do? (1- Send Fleet, 2- Call Back Fleet):");
+                Console.WriteLine($"{player.Name}, What do you want to do? (1- Send Fleet, 2- Call Back Fleet, 3- Fleet Options):");
                 Console.ResetColor();  // Reset text color
                 var input = Console.ReadLine();
                 Console.ForegroundColor = player.Color;  // Set text color to player specific color
-                if (int.TryParse(input, out int actionChoice) && (actionChoice == 1 || actionChoice == 2))
+                if (int.TryParse(input, out int actionChoice) && actionChoice > 0 && actionChoice < 4)
                 {
-                    Planet target = SelectTargetPlanet(player);
-                    if (actionChoice == 1)
+                    if (actionChoice == 3) // BURAYA DEVAM ET
                     {
+                        Console.WriteLine("-------------------------------------------------");
+                        Console.WriteLine($"{player.Name}, What do you want to do? (1- Send Fleet, 2- Call Back Fleet, 3- Fleet Options):");
+                        Console.ResetColor();  // Reset text color                      
+                    }
+                    else if (actionChoice == 1)
+                    {
+                        Planet target = SelectTargetPlanet(player);
                         if (target.OccupiedBy == null || target.OccupiedBy == player)
                         {
                             SendFleet(player, target);
                         }
                     }
-                    else
+                    else if (actionChoice == 2)
                     {
+                        Planet target = SelectTargetPlanet(player);
                         CallBackFleet(player, target);
                     }
                     UpdateSpace();  // Update space after fleet action
@@ -181,9 +243,9 @@ public class Game
                 else
                 {
                     Console.WriteLine("-------------------------------------------------");
-                    Console.WriteLine("Invalid input. Please enter (1- Send Fleet, 2- Call Back Fleet)");
+                    Console.WriteLine("Invalid input. Please enter (1- Send Fleet, 2- Call Back Fleet, 3- Fleet Options)");
                 }
-                Console.ResetColor();  // Reset text color
+                Console.ResetColor();  // Reset text color*/
             }
             // var livePlayers = players.Where(player => player.IsAlive).ToList();
             // if (livePlayers.Count == 1)
@@ -196,7 +258,17 @@ public class Game
 
     private Planet SelectTargetPlanet(Player player)
     {
+        var selectedPlanet = AnsiConsole.Prompt(
+            new SelectionPrompt<Planet>()
+            .Title($"[{player.Color.ToString().ToLower()}]{player.Name}, Select a target planet:[/]")
+            .PageSize(10)
+            .MoreChoicesText("[grey](Move up and down to reveal more planets)[/]")
+            .AddChoices(planets));
+            
         Console.WriteLine("-------------------------------------------------");
+        return selectedPlanet;
+
+        /*Console.WriteLine("-------------------------------------------------");
         Console.WriteLine("Select a target planet:");
         int index = 1;
         Dictionary<int, Planet> targetOptions = new Dictionary<int, Planet>();
@@ -211,7 +283,7 @@ public class Game
             }
             else if (planet.OccupiedBy == player)
             {
-                Console.WriteLine($"{index} - {planet.Name}");
+                Console.WriteLine($"{index} - {planet.Name}, ({planet.Position.X},{planet.Position.Y})");
                 targetOptions[index] = planet;
             }
             else continue;
@@ -224,7 +296,7 @@ public class Game
         }
         Console.WriteLine("-------------------------------------------------");
         Console.WriteLine("Invalid selection. Please try again.");
-        return null;
+        return null;*/
     }
 
     private void SendFleet(Player player, Planet target)
