@@ -131,6 +131,7 @@ public class Game
             {
                 return playerCount;
             }
+            Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("Invalid input. Player count cannot be less than 2.");
         }
     }
@@ -155,12 +156,14 @@ public class Game
                 if (!player.IsAlive) continue;
 
                 Console.ForegroundColor = player.Color;  // Set text color to player specific color
+                Console.WriteLine("-------------------------------------------------");
                 Console.WriteLine($"{player.Name}, What do you want to do? (1- Send Fleet, 2- Call Back Fleet):");
                 Console.ResetColor();  // Reset text color
                 var input = Console.ReadLine();
+                Console.ForegroundColor = player.Color;  // Set text color to player specific color
                 if (int.TryParse(input, out int actionChoice) && (actionChoice == 1 || actionChoice == 2))
                 {
-                    Planet target = SelectTargetPlanet();
+                    Planet target = SelectTargetPlanet(player);
                     if (actionChoice == 1)
                     {
                         if (target.OccupiedBy == null || target.OccupiedBy == player)
@@ -172,13 +175,15 @@ public class Game
                     {
                         CallBackFleet(player, target);
                     }
-                    UpdateSpace();  // Update grid after move or attack
-                    DisplaySpace();  // Display grid
+                    UpdateSpace();  // Update space after fleet action
+                    DisplaySpace();  // Display space
                 }
                 else
                 {
+                    Console.WriteLine("-------------------------------------------------");
                     Console.WriteLine("Invalid input. Please enter (1- Send Fleet, 2- Call Back Fleet)");
                 }
+                Console.ResetColor();  // Reset text color
             }
             // var livePlayers = players.Where(player => player.IsAlive).ToList();
             // if (livePlayers.Count == 1)
@@ -189,15 +194,27 @@ public class Game
         }
     }
 
-    private Planet SelectTargetPlanet()
+    private Planet SelectTargetPlanet(Player player)
     {
+        Console.WriteLine("-------------------------------------------------");
         Console.WriteLine("Select a target planet:");
         int index = 1;
         Dictionary<int, Planet> targetOptions = new Dictionary<int, Planet>();
         foreach (var planet in planets)
         {
-            Console.WriteLine($"{index} - {planet.Name}");
-            targetOptions[index] = planet;
+            if (planet.OccupiedBy == null)
+            {
+                Console.ResetColor();  // Reset text color
+                Console.WriteLine($"{index} - {planet.Name}");
+                targetOptions[index] = planet;
+                Console.ForegroundColor = player.Color;  // Set text color to planet specific color
+            }
+            else if (planet.OccupiedBy == player)
+            {
+                Console.WriteLine($"{index} - {planet.Name}");
+                targetOptions[index] = planet;
+            }
+            else continue;
             index++;
         }
         int choice;
@@ -205,6 +222,7 @@ public class Game
         {
             return targetOptions[choice];
         }
+        Console.WriteLine("-------------------------------------------------");
         Console.WriteLine("Invalid selection. Please try again.");
         return null;
     }
@@ -213,13 +231,16 @@ public class Game
     {
         if (target.OccupiedBy != null)
         {
+            Console.WriteLine("-------------------------------------------------");
             if (target.OccupiedBy != player)
             {
                 Console.WriteLine($"{target.Name} has been occupied by {target.OccupiedBy.Name}. Please select another target.");
-                SelectTargetPlanet();
             }
             else
-                CallBackFleet(player, target);
+            {
+                Console.WriteLine($"{target.Name} has been occupied by you. Please select another target.");
+            }
+            SelectTargetPlanet(player);
         }
         else
         {
@@ -235,6 +256,9 @@ public class Game
             target.Color = ConsoleColor.White;
         }
         else
+        {
+            Console.WriteLine("-------------------------------------------------");
             Console.WriteLine($"You do not have any fleet in {target.Name}");
+        }
     }
 }
