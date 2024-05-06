@@ -88,7 +88,7 @@ public class Game
         foreach (var planet in planets)
         {
             space[(int)planet.Position.X, (int)planet.Position.Y] = '@';  // Represent planet with '@'
-            planetPosition[(int)planet.Position.X, (int)planet.Position.Y] = planet;  // Reference player in grid
+            planetPosition[(int)planet.Position.X, (int)planet.Position.Y] = planet;  // Reference player in space
         }
 
         foreach (var player in players)
@@ -96,7 +96,7 @@ public class Game
             if (player.IsAlive)
             {
                 space[(int)player.Position.X, (int)player.Position.Y] = 'P';  // Represent player with 'P'
-                playerPosition[(int)player.Position.X, (int)player.Position.Y] = player;  // Reference player in grid
+                playerPosition[(int)player.Position.X, (int)player.Position.Y] = player;  // Reference player in space
             }
         }
     }
@@ -138,17 +138,6 @@ public class Game
                 _ => ValidationResult.Success(),
             };
         }));
-
-        /*while (true)
-        {
-            Console.WriteLine("How many players will play the game?");
-            if (int.TryParse(Console.ReadLine(), out int playerCount) && playerCount >= 2)
-            {
-                return playerCount;
-            }
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine("Invalid input. Player count cannot be less than 2.");
-        }*/
     }
 
     private void DisplayPlayerStatus(Player player)
@@ -206,46 +195,8 @@ public class Game
                         }
                     default: break;
                 }
-
                 UpdateSpace();  // Update space after fleet action
-                DisplaySpace();  // Display space
-
-                /* Console.ForegroundColor = player.Color;  // Set text color to player specific color
-                Console.WriteLine("-------------------------------------------------");
-                Console.WriteLine($"{player.Name}, What do you want to do? (1- Send Fleet, 2- Call Back Fleet, 3- Fleet Options):");
-                Console.ResetColor();  // Reset text color
-                var input = Console.ReadLine();
-                Console.ForegroundColor = player.Color;  // Set text color to player specific color
-                if (int.TryParse(input, out int actionChoice) && actionChoice > 0 && actionChoice < 4)
-                {
-                    if (actionChoice == 3) // BURAYA DEVAM ET
-                    {
-                        Console.WriteLine("-------------------------------------------------");
-                        Console.WriteLine($"{player.Name}, What do you want to do? (1- Send Fleet, 2- Call Back Fleet, 3- Fleet Options):");
-                        Console.ResetColor();  // Reset text color                      
-                    }
-                    else if (actionChoice == 1)
-                    {
-                        Planet target = SelectTargetPlanet(player);
-                        if (target.OccupiedBy == null || target.OccupiedBy == player)
-                        {
-                            SendFleet(player, target);
-                        }
-                    }
-                    else if (actionChoice == 2)
-                    {
-                        Planet target = SelectTargetPlanet(player);
-                        CallBackFleet(player, target);
-                    }
-                    UpdateSpace();  // Update space after fleet action
-                    DisplaySpace();  // Display space
-                }
-                else
-                {
-                    Console.WriteLine("-------------------------------------------------");
-                    Console.WriteLine("Invalid input. Please enter (1- Send Fleet, 2- Call Back Fleet, 3- Fleet Options)");
-                }
-                Console.ResetColor();  // Reset text color*/
+                DisplaySpace();  // Display space  
             }
             // var livePlayers = players.Where(player => player.IsAlive).ToList();
             // if (livePlayers.Count == 1)
@@ -264,39 +215,8 @@ public class Game
             .PageSize(10)
             .MoreChoicesText("[grey](Move up and down to reveal more planets)[/]")
             .AddChoices(planets));
-            
         Console.WriteLine("-------------------------------------------------");
         return selectedPlanet;
-
-        /*Console.WriteLine("-------------------------------------------------");
-        Console.WriteLine("Select a target planet:");
-        int index = 1;
-        Dictionary<int, Planet> targetOptions = new Dictionary<int, Planet>();
-        foreach (var planet in planets)
-        {
-            if (planet.OccupiedBy == null)
-            {
-                Console.ResetColor();  // Reset text color
-                Console.WriteLine($"{index} - {planet.Name}");
-                targetOptions[index] = planet;
-                Console.ForegroundColor = player.Color;  // Set text color to planet specific color
-            }
-            else if (planet.OccupiedBy == player)
-            {
-                Console.WriteLine($"{index} - {planet.Name}, ({planet.Position.X},{planet.Position.Y})");
-                targetOptions[index] = planet;
-            }
-            else continue;
-            index++;
-        }
-        int choice;
-        if (int.TryParse(Console.ReadLine(), out choice) && targetOptions.ContainsKey(choice))
-        {
-            return targetOptions[choice];
-        }
-        Console.WriteLine("-------------------------------------------------");
-        Console.WriteLine("Invalid selection. Please try again.");
-        return null;*/
     }
 
     private void SendFleet(Player player, Planet target)
