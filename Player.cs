@@ -1,4 +1,5 @@
 using System.Numerics;
+using Galaxy;
 
 public class Player
 {
@@ -8,7 +9,8 @@ public class Player
     public Vector2 Position { get; private set; }
     public bool IsAlive => Health > 0;
     public ConsoleColor Color { get; }  // Color property
-
+    public List<Fleet> Fleets { get; internal set; } = new List<Fleet>();
+    public List<SpaceShip> Spaceships { get; internal set; } = new List<SpaceShip>();
 
     public Player(string name, int health, int gold, ConsoleColor color)
     {

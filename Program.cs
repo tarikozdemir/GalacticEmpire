@@ -180,7 +180,7 @@ public class Game
 
             case "Fleet Options":
                 {
-                    // Work in progress
+                    FleetOptions(player);
                     break;
                 }
             default: break;
@@ -219,15 +219,11 @@ public class Game
         {
             AnsiConsole.Write(new Markup($"[{target.Color}]{target.Name} has been occupied by you. Please select another target.[/]"));
             AnsiConsole.WriteLine();
-            // target = SelectTargetPlanet(player);
-            // SendFleet(player, target);
         }
         else
         {
             AnsiConsole.Write(new Markup($"[{target.Color}]{target.Name} has been occupied by {target.OccupiedBy.Name}. Please select another target.[/]"));
             AnsiConsole.WriteLine();
-            // target = SelectTargetPlanet(player);
-            // SendFleet(player, target);
         }
     }
 
@@ -246,4 +242,96 @@ public class Game
             Console.WriteLine($"{player.Name} do not have any fleet in {target.Name}");
         }
     }
+
+    private void FleetOptions(Player player)
+    {
+        var fleetActions = new SelectionPrompt<string>()
+            .Title("Select an action for your fleet:")
+            .PageSize(10)
+            .AddChoices(new[] {
+            "Create a Fleet", "Disband a Fleet", "List Fleets"
+            });
+
+        string chosenAction = AnsiConsole.Prompt(fleetActions);
+
+        switch (chosenAction)
+        {
+            case "Create a Fleet":
+                CreateFleet(player);
+                break;
+            case "Disband a Fleet":
+                DisbandFleet(player);
+                break;
+            case "List Fleets":
+                ListFleets(player);
+                break;
+            default:
+                Console.WriteLine("Invalid option selected.");
+                break;
+        }
+    }
+
+    private void CreateFleet(Player player)
+    {
+        List<SpaceShip> selectedShips = new List<SpaceShip>();
+
+        // Assuming `player.Spaceships` contains a list of all the player's available ships
+        var shipSelection = AnsiConsole.Prompt(
+            new MultiSelectionPrompt<SpaceShip>()
+                .Title($"Select ships to form a new fleet for {player.Name}:")
+                .PageSize(10)
+                .AddChoices(player.Spaceships)); // Adjust as per your data structure
+
+        selectedShips.AddRange(shipSelection);
+
+        if (selectedShips.Count > 0)
+        {
+            Fleet newFleet = new Fleet(selectedShips);
+            player.Fleets.Add(newFleet); // Add to player's fleet list
+            Console.WriteLine($"New fleet created with {selectedShips.Count} ships.");
+        }
+        else
+        {
+            Console.WriteLine("No ships were selected.");
+        }
+    }
+
+    private void DisbandFleet(Player player)
+    {
+        if (player.Fleets.Count == 0)
+        {
+            Console.WriteLine($"{player.Name} has no fleets to disband.");
+            return;
+        }
+
+        var fleetSelection = AnsiConsole.Prompt(
+            new SelectionPrompt<Fleet>()
+                .Title($"Select a fleet to disband:")
+                .PageSize(10)
+                .AddChoices(player.Fleets));
+
+        Fleet selectedFleet = fleetSelection;
+        player.Fleets.Remove(selectedFleet);
+
+        // Assuming player.Spaceships is a List containing all the player's available ships
+        player.Spaceships.AddRange(selectedFleet.Ships);
+        Console.WriteLine($"Fleet disbanded, {selectedFleet.Ships.Count} ships returned to general inventory.");
+    }
+
+    private void ListFleets(Player player)
+    {
+        if (player.Fleets.Count == 0)
+        {
+            Console.WriteLine($"{player.Name} has no fleets.");
+        }
+        else
+        {
+            foreach (var fleet in player.Fleets)
+            {
+                fleet.DisplayFleetInfo();
+            }
+        }
+    }
+
+
 }
