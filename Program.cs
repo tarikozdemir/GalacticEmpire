@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Galaxy;
 using Spectre.Console;
 
@@ -30,22 +31,28 @@ internal class Program
 
 public class Game
 {
+    private Cell[,] space;
+    private int spaceSize = 20;
     private List<Planet> planets = new List<Planet>();
     private List<Player> players = new List<Player>();
     private bool gameRunning = true;
-    private int spaceSize = 20;
-    private char[,] space;
-    private Planet[,] planetPosition;
-    private Player[,] playerPosition;
     private ConsoleColor[] playerColors = new ConsoleColor[] { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Cyan, ConsoleColor.Magenta, ConsoleColor.Yellow, ConsoleColor.White };
-
 
     public Game()
     {
-        space = new char[spaceSize, spaceSize];
-        planetPosition = new Planet[spaceSize, spaceSize];
-        playerPosition = new Player[spaceSize, spaceSize];
-        ClearSpace();
+        space = new Cell[spaceSize, spaceSize];
+        InitializeSpace();
+    }
+
+    private void InitializeSpace()
+    {
+        for (int i = 0; i < spaceSize; i++)
+        {
+            for (int j = 0; j < spaceSize; j++)
+            {
+                space[i, j] = new Cell();
+            }
+        }
     }
     public void InitializeGame()
     {
@@ -55,49 +62,36 @@ public class Game
             string playerName = AnsiConsole.Ask<string>($"What is the [green]name[/] of player [bold]{i + 1}[/]?");
             var player = new Player(playerName, 100, 100, playerColors[i % playerColors.Length]);
             players.Add(player);
-            UpdateSpace();  // Update grid with all player positions
-            DisplayPlayerStatus(player);
+            PlacePlayer(player);
         }
 
         for (int i = 0; i < playerCount * 2; i++)
         {
-            var planet = new Planet("planet" + (i + 1), spaceSize);
+            Vector2 position = new Vector2(Random.Shared.Next(0, spaceSize), Random.Shared.Next(0, spaceSize));
+            var planet = new Planet($"Planet {i + 1}", position);
             planets.Add(planet);
-            UpdateSpace();  // Update grid with all planet positions
-            // DisplayPlanetStatus(planet);
+            PlacePlanet(planet);
         }
         DisplaySpace();  // Display updated space
     }
 
-    public void ClearSpace()
+    private void PlacePlayer(Player player)
     {
-        for (int i = 0; i < spaceSize; i++)
+        Vector2 position;
+        do
         {
-            for (int j = 0; j < spaceSize; j++)
-            {
-                space[i, j] = '.';
-                planetPosition[i, j] = null;  // Clear planet references
-                playerPosition[i, j] = null;  // Clear player references
-            }
-        }
+            position = new Vector2(Random.Shared.Next(0, spaceSize), Random.Shared.Next(0, spaceSize));
+        } while (!space[(int)position.X, (int)position.Y].IsEmpty);
+
+        space[(int)position.X, (int)position.Y].Player = player;
     }
 
-    private void UpdateSpace()
+    private void PlacePlanet(Planet planet)
     {
-        ClearSpace();  // Clear previous positions
-        foreach (var planet in planets)
+        Vector2 position = planet.Position;
+        if (position.X >= 0 && position.X < spaceSize && position.Y >= 0 && position.Y < spaceSize)
         {
-            space[(int)planet.Position.X, (int)planet.Position.Y] = '@';  // Represent planet with '@'
-            planetPosition[(int)planet.Position.X, (int)planet.Position.Y] = planet;  // Reference player in space
-        }
-
-        foreach (var player in players)
-        {
-            if (player.IsAlive)
-            {
-                space[(int)player.Position.X, (int)player.Position.Y] = 'P';  // Represent player with 'P'
-                playerPosition[(int)player.Position.X, (int)player.Position.Y] = player;  // Reference player in space
-            }
+            space[(int)position.X, (int)position.Y].Planet = planet;
         }
     }
 
@@ -107,16 +101,9 @@ public class Game
         {
             for (int j = 0; j < spaceSize; j++)
             {
-                if (playerPosition[i, j] != null)
-                {
-                    Console.ForegroundColor = playerPosition[i, j].Color;  // Set player specific color
-                }
-                if (planetPosition[i, j] != null)
-                {
-                    Console.ForegroundColor = planetPosition[i, j].Color;  // Set planet specific color
-                }
-                Console.Write(space[i, j] + " ");
-                Console.ResetColor();  // Reset color for other cells
+                Console.ForegroundColor = space[i, j].Color;
+                Console.Write(space[i, j].DisplayChar + " ");
+                Console.ResetColor();
             }
             Console.WriteLine();
         }
@@ -144,7 +131,6 @@ public class Game
     {
         Console.WriteLine("------------ PLAYER STATUS -------------");
         Console.ForegroundColor = player.Color;
-        //Console.WriteLine($"[{player.Color.ToString().ToLower()}]{player.Name} is located at [{player.Position.X},{player.Position.Y}].[/]");
         Console.WriteLine($"{player.Name} is located at [{player.Position.X},{player.Position.Y}].");
         Console.ResetColor();  // Reset text color to default
         Console.WriteLine("-------------- GAME GRID ---------------");
@@ -176,10 +162,8 @@ public class Game
                     case "Send Fleet":
                         {
                             Planet target = SelectTargetPlanet(player);
-                            if (target.OccupiedBy == null || target.OccupiedBy == player)
-                            {
-                                SendFleet(player, target);
-                            }
+                            SendFleet(player, target);
+
                             break;
                         }
                     case "Call Back Fleet":
@@ -196,7 +180,6 @@ public class Game
                         }
                     default: break;
                 }
-                UpdateSpace();  // Update space after fleet action
                 DisplaySpace();  // Display space  
             }
             // var livePlayers = players.Where(player => player.IsAlive).ToList();
@@ -239,7 +222,7 @@ public class Game
         }
         else
         {
-            AnsiConsole.Write(new Markup($"[{target.Color}]{target.Name} has been occupied by you. Please select another target.[/]"));
+            AnsiConsole.Write(new Markup($"[{target.Color}]{target.Name} has been occupied by {target.OccupiedBy.Name}. Please select another target.[/]"));
             AnsiConsole.WriteLine();
             // target = SelectTargetPlanet(player);
             // SendFleet(player, target);
