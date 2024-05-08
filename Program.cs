@@ -31,6 +31,15 @@ internal class Program
 
 public class Game
 {
+    public List<SpaceShip> InitializeAvailableShips()
+    {
+        return new List<SpaceShip>
+    {
+        new SpaceShip("Explorer I", "Explorer", new List<Crew>(), 120, 500, 300, 80, 100,"", 200),
+        new SpaceShip("Vanguard", "Fighter", new List<Crew>(), 150, 300, 150, 150, 200,"", 300),
+        // Add more predefined ships with different attributes and costs
+    };
+    }
     private Cell[,] space;
     private int spaceSize = 20;
     private List<Planet> planets = new List<Planet>();
@@ -62,7 +71,7 @@ public class Game
         for (int i = 0; i < playerCount; i++)
         {
             string playerName = AnsiConsole.Ask<string>($"What is the [green]name[/] of player [bold]{i + 1}[/]?");
-            var player = new Player(playerName, 100, 100, playerColors[i % playerColors.Length]);
+            var player = new Player(playerName, 100, playerColors[i % playerColors.Length]);
             players.Add(player);
             PlacePlayer(player);
         }
@@ -74,6 +83,7 @@ public class Game
             planets.Add(planet);
             PlacePlanet(planet);
         }
+
         DisplaySpace();  // Display updated space
     }
 
@@ -131,12 +141,14 @@ public class Game
 
     public void RunGameLoop()
     {
+        List<SpaceShip> availableShips = InitializeAvailableShips();  // This should ideally be part of the game's initialization
+
         while (gameRunning)
         {
             foreach (var player in players)
             {
                 if (!player.IsAlive) continue;
-                PerformPlayerTurn(player);
+                PerformPlayerTurn(player, availableShips);
                 DisplaySpace();  // Display space  
             }
             EvaluateRound();
@@ -151,7 +163,7 @@ public class Game
         }
     }
 
-    private void PerformPlayerTurn(Player player)
+    private void PerformPlayerTurn(Player player, List<SpaceShip> availableShips)
     {
         var input = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
@@ -180,7 +192,7 @@ public class Game
 
             case "Fleet Options":
                 {
-                    FleetOptions(player);
+                    FleetOptions(player, availableShips);
                     break;
                 }
             default: break;
@@ -243,13 +255,13 @@ public class Game
         }
     }
 
-    private void FleetOptions(Player player)
+    private void FleetOptions(Player player, List<SpaceShip> availableShips)
     {
         var fleetActions = new SelectionPrompt<string>()
             .Title("Select an action for your fleet:")
             .PageSize(10)
             .AddChoices(new[] {
-            "Create a Fleet", "Disband a Fleet", "List Fleets"
+            "Create a Fleet", "Disband a Fleet", "List Fleets", "Purchase Ship"
             });
 
         string chosenAction = AnsiConsole.Prompt(fleetActions);
@@ -265,9 +277,39 @@ public class Game
             case "List Fleets":
                 ListFleets(player);
                 break;
+            case "Purchase Ship":
+                PurchaseShip(player, availableShips);
+                break;
             default:
                 Console.WriteLine("Invalid option selected.");
                 break;
+        }
+    }
+
+    public void PurchaseShip(Player player, List<SpaceShip> availableShips)
+    {
+        Console.WriteLine("Available Ships for Purchase:");
+        foreach (var ship in availableShips)
+        {
+            ship.DisplaySpaceShipInfo();
+        }
+
+        var selectedShip = AnsiConsole.Prompt(
+            new SelectionPrompt<SpaceShip>()
+            .Title("Select a ship to purchase:")
+            .PageSize(10)
+            .UseConverter(s => s.Name + " - " + s.Cost + " Gold")
+            .AddChoices(availableShips));
+
+        if (player.Gold >= selectedShip.Cost)
+        {
+            player.Gold -= selectedShip.Cost;  // Deduct the cost from player's gold
+            player.Spaceships.Add(selectedShip);  // Add the ship to the player's fleet
+            Console.WriteLine($"{player.Name} purchased {selectedShip.Name} for {selectedShip.Cost} Gold.");
+        }
+        else
+        {
+            Console.WriteLine("Not enough gold to purchase this ship.");
         }
     }
 
@@ -332,6 +374,4 @@ public class Game
             }
         }
     }
-
-
 }

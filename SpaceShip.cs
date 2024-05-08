@@ -14,17 +14,14 @@ namespace Galaxy
         public List<Crew> Crews { get; } = new List<Crew>();
         public int MaxSpeed { get; set; }
         public int FuelCapacity { get; set; }
-
         public int CargoCapacity { get; set; }
-
         public int FirePower { get; set; }
-
         public int ShieldStrength { get; set; }
-
         public string? FleetName { get; set; } = null; // bunu fleet diye obje oluştur
+        public int Cost { get; set; }  // Cost in gold
 
         // Constructor
-        public SpaceShip(string name, string type, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName)
+        public SpaceShip(string name, string type, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
         {
             Name = name;
             Type = type;
@@ -35,12 +32,12 @@ namespace Galaxy
             FirePower = firePower;
             ShieldStrength = shieldStrength;
             FleetName = fleetName;
+            Cost = cost;
         }
 
         public void DisplaySpaceShipInfo()
         {
-            Console.WriteLine($"Spaceship Name: {Name}");
-            Console.WriteLine($"Type: {Type}");
+            Console.WriteLine($"Spaceship Name: {Name}, {Type}, {Cost}");
             Console.WriteLine($"Crews: ");
             foreach (var crew in Crews)
             {
