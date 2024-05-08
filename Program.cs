@@ -142,12 +142,14 @@ public class Game
 
     private void DisplayPlayerStatus(Player player)
     {
-        Console.WriteLine("--------------- PLAYER STATUS ---------------");
-        Console.WriteLine($"[{player.Color.ToString().ToLower()}]{player.Name} is located at [{player.Position.X},{player.Position.Y}].[/]");
+        Console.WriteLine("------------ PLAYER STATUS -------------");
+        Console.ForegroundColor = player.Color;
+        //Console.WriteLine($"[{player.Color.ToString().ToLower()}]{player.Name} is located at [{player.Position.X},{player.Position.Y}].[/]");
+        Console.WriteLine($"{player.Name} is located at [{player.Position.X},{player.Position.Y}].");
         Console.ResetColor();  // Reset text color to default
-        Console.WriteLine("----------------- GAME GRID -----------------");
+        Console.WriteLine("-------------- GAME GRID ---------------");
         DisplaySpace();  // Display the updated game grid
-        Console.WriteLine("-------------------------------------------------");
+        Console.WriteLine("----------------------------------------");
     }
 
     public void RunGameLoop()
@@ -214,45 +216,49 @@ public class Game
             .PageSize(10)
             .MoreChoicesText("[grey](Move up and down to reveal more planets)[/]")
             .AddChoices(planets));
-        Console.WriteLine("-------------------------------------------------");
+        Console.WriteLine("----------------------------------------");
         return selectedPlanet;
     }
 
     private void SendFleet(Player player, Planet target)
     {
-        Console.WriteLine("-------------------------------------------------");
+        Console.WriteLine("----------------------------------------");
         if (target.OccupiedBy == null)
         {
             target.OccupiedBy = player;
             target.Color = player.Color;
-            AnsiConsole.Write(new Markup($"You occupied [{target.Color}]{target.Name}.[/]"));
+            AnsiConsole.Write(new Markup($"{player.Name} occupied [{target.Color}]{target.Name}.[/]"));
+            AnsiConsole.WriteLine();
         }
         else if (target.OccupiedBy == player)
         {
             AnsiConsole.Write(new Markup($"[{target.Color}]{target.Name} has been occupied by you. Please select another target.[/]"));
-            target = SelectTargetPlanet(player);
-            SendFleet(player, target);
+            AnsiConsole.WriteLine();
+            // target = SelectTargetPlanet(player);
+            // SendFleet(player, target);
         }
         else
         {
             AnsiConsole.Write(new Markup($"[{target.Color}]{target.Name} has been occupied by you. Please select another target.[/]"));
-            target = SelectTargetPlanet(player);
-            SendFleet(player, target);
+            AnsiConsole.WriteLine();
+            // target = SelectTargetPlanet(player);
+            // SendFleet(player, target);
         }
     }
+
     private void CallBackFleet(Player player, Planet target)
     {
         if (target.OccupiedBy == player)
         {
             target.OccupiedBy = null;
             target.Color = ConsoleColor.White;
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine($"You called your fleet back from {target.Name}");
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine($"{player.Name} called your fleet back from {target.Name}");
         }
         else
         {
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine($"You do not have any fleet in {target.Name}");
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine($"{player.Name} do not have any fleet in {target.Name}");
         }
     }
 }
