@@ -36,6 +36,8 @@ public class Game
     private List<Planet> planets = new List<Planet>();
     private List<Player> players = new List<Player>();
     private bool gameRunning = true;
+    private int currentRound = 1;  // Round tracking
+
     private ConsoleColor[] playerColors = new ConsoleColor[] { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Cyan, ConsoleColor.Magenta, ConsoleColor.Yellow, ConsoleColor.White };
 
     public Game()
@@ -127,17 +129,6 @@ public class Game
         }));
     }
 
-    private void DisplayPlayerStatus(Player player)
-    {
-        Console.WriteLine("------------ PLAYER STATUS -------------");
-        Console.ForegroundColor = player.Color;
-        Console.WriteLine($"{player.Name} is located at [{player.Position.X},{player.Position.Y}].");
-        Console.ResetColor();  // Reset text color to default
-        Console.WriteLine("-------------- GAME GRID ---------------");
-        DisplaySpace();  // Display the updated game grid
-        Console.WriteLine("----------------------------------------");
-    }
-
     public void RunGameLoop()
     {
         while (gameRunning)
@@ -145,43 +136,12 @@ public class Game
             foreach (var player in players)
             {
                 if (!player.IsAlive) continue;
-
-                // Ask for the user's favorite fruit
-                var input = AnsiConsole.Prompt(
-                    new SelectionPrompt<string>()
-                    .Title($"[{player.Color.ToString().ToLower()}]{player.Name}, What do you want to do?[/]")
-                    .PageSize(10)
-                    .MoreChoicesText("[grey](Move up and down to reveal more fruits)[/]")
-                    .AddChoices(new[]
-                    {
-                        "Send Fleet", "Call Back Fleet", "Fleet Options",
-                    }));
-
-                switch (input)
-                {
-                    case "Send Fleet":
-                        {
-                            Planet target = SelectTargetPlanet(player);
-                            SendFleet(player, target);
-
-                            break;
-                        }
-                    case "Call Back Fleet":
-                        {
-                            Planet target = SelectTargetPlanet(player);
-                            CallBackFleet(player, target);
-                            break;
-                        }
-
-                    case "Fleet Options":
-                        {
-                            // Work in progress
-                            break;
-                        }
-                    default: break;
-                }
+                PerformPlayerTurn(player);
                 DisplaySpace();  // Display space  
             }
+            EvaluateRound();
+            currentRound++;  // Advance to the next round
+            Console.WriteLine($"Round {currentRound} begins");
             // var livePlayers = players.Where(player => player.IsAlive).ToList();
             // if (livePlayers.Count == 1)
             // {
@@ -189,6 +149,48 @@ public class Game
             //     gameRunning = false;
             // }
         }
+    }
+
+    private void PerformPlayerTurn(Player player)
+    {
+        var input = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .Title($"[{player.Color.ToString().ToLower()}]{player.Name}, What do you want to do?[/]")
+            .PageSize(10)
+            .MoreChoicesText("[grey](Move up and down to reveal more fruits)[/]")
+            .AddChoices(new[]
+            {
+                        "Send Fleet", "Call Back Fleet", "Fleet Options",
+            }));
+
+        switch (input)
+        {
+            case "Send Fleet":
+                {
+                    Planet target = SelectTargetPlanet(player);
+                    SendFleet(player, target);
+                    break;
+                }
+            case "Call Back Fleet":
+                {
+                    Planet target = SelectTargetPlanet(player);
+                    CallBackFleet(player, target);
+                    break;
+                }
+
+            case "Fleet Options":
+                {
+                    // Work in progress
+                    break;
+                }
+            default: break;
+        }
+    }
+
+    private void EvaluateRound()
+    {
+        // Evaluate end of round conditions, update resources, check victory, etc.
+        Console.WriteLine("Evaluating end of round conditions...");
     }
 
     private Planet SelectTargetPlanet(Player player)
