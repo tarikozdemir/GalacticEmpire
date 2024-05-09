@@ -5,7 +5,7 @@ public class Player
 {
     public string Name { get; }
     public int Health { get; set; }
-    public int Gold { get; set; } = 1000;
+    public long Gold { get; set; } = 100000;
     public Vector2 Position { get; private set; }
     public bool IsAlive => Health > 0;
     public ConsoleColor Color { get; }  // Color property

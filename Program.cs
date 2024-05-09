@@ -322,8 +322,8 @@ public class Game
         var selectedShip = AnsiConsole.Prompt(
             new SelectionPrompt<SpaceShip>()
             .Title("Select a ship to purchase:")
-            .PageSize(10)
-            .UseConverter(s => s.Name + " - " + s.Cost + " Gold")
+            .PageSize(20)
+            .UseConverter(s => s.Type + " => " + s.Name + " - " + s.Cost + " Gold")
             .AddChoices(availableShips));
 
         if (player.Gold >= selectedShip.Cost)
@@ -396,6 +396,19 @@ public class Game
             foreach (var fleet in player.Fleets)
             {
                 fleet.DisplayFleetInfo();
+            }
+        }
+
+        Console.WriteLine("Available Ships:");
+        if (player.Spaceships.Count == 0)
+        {
+            Console.WriteLine("No available ships.");
+        }
+        else
+        {
+            foreach (var ship in player.Spaceships)
+            {
+                ship.DisplaySpaceShipInfo();
             }
         }
     }

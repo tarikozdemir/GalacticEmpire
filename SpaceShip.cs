@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Spectre.Console;
 
 namespace Galaxy
 {
@@ -9,9 +10,10 @@ namespace Galaxy
     {
         // Properties
         public string? Name { get; set; }
-        public string? Description { get; set; }
         public string? Type { get; set; }
         // Different types of ships (warships, trade ships, exploration ships, etc.)
+        public string? Description { get; set; }
+
         public List<Crew> Crews { get; } = new List<Crew>();
         public int MaxSpeed { get; set; }
         public int FuelCapacity { get; set; }
@@ -22,11 +24,11 @@ namespace Galaxy
         public int Cost { get; set; }  // Cost in gold
 
         // Constructor
-        public SpaceShip(string name, string description, string type, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
+        public SpaceShip(string name, string type, string description, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
         {
             Name = name;
-            Description = description;
             Type = type;
+            Description = description;
             Crews = crews ?? new(); //null gelirse de boş liste kullan dedik. GPT'ye sor.
             MaxSpeed = maxSpeed;
             FuelCapacity = fuelCapacity;
@@ -39,18 +41,7 @@ namespace Galaxy
 
         public void DisplaySpaceShipInfo()
         {
-            Console.WriteLine($"Spaceship Name: {Name}, {Type}, {Cost}");
-            Console.WriteLine($"Crews: ");
-            foreach (var crew in Crews)
-            {
-                Console.WriteLine($"- {crew.Name}: Quantity: {crew.Quantity}");
-            }
-            Console.WriteLine($"Maxspeed: {MaxSpeed}");
-            Console.WriteLine($"Fuel capacity: {FuelCapacity}");
-            Console.WriteLine($"Cargo capacity: {CargoCapacity}");
-            Console.WriteLine($"Fire power: {FirePower}");
-            Console.WriteLine($"Shield strength: {ShieldStrength}");
-            Console.WriteLine($"Fleet name (if assigned): {FleetName}");
+        Console.WriteLine($"{Name}, {Type}, Speed: {MaxSpeed}, Fuel: {FuelCapacity}, Cargo: {CargoCapacity}, Fire: {FirePower}, Shield: {ShieldStrength}, Cost: {Cost}");
         }
     }
 
