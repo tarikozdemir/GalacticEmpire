@@ -9,6 +9,7 @@ namespace Galaxy
     {
         // Properties
         public string? Name { get; set; }
+        public string? Description { get; set; }
         public string? Type { get; set; }
         // Different types of ships (warships, trade ships, exploration ships, etc.)
         public List<Crew> Crews { get; } = new List<Crew>();
@@ -21,9 +22,10 @@ namespace Galaxy
         public int Cost { get; set; }  // Cost in gold
 
         // Constructor
-        public SpaceShip(string name, string type, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
+        public SpaceShip(string name, string description, string type, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
         {
             Name = name;
+            Description = description;
             Type = type;
             Crews = crews ?? new(); //null gelirse de boş liste kullan dedik. GPT'ye sor.
             MaxSpeed = maxSpeed;
@@ -50,5 +52,30 @@ namespace Galaxy
             Console.WriteLine($"Shield strength: {ShieldStrength}");
             Console.WriteLine($"Fleet name (if assigned): {FleetName}");
         }
+    }
+
+    public enum SpaceShipType
+    {
+        Scout,
+        // Features: Small and fast.
+        // Usage: Exploration, gathering information, scanning enemy territories.
+        Fighter,
+        // Features: High attack and defense capabilities.
+        // Usage: Attacking, capturing enemy ships or bases.
+        Frigate,
+        // Features: Medium-sized and balanced.
+        // Usage: Balances between offense and defense.
+        Destroyer,
+        // Features: High attack capacity, medium defense.
+        // Usage: Effective in intense combat scenarios.
+        Cruiser,
+        // Features: Large, durable, and multifunctional.
+        // Usage: Heavy attack or defense operations.
+        Capital_Ship,
+        // Features: Very large and multifunctional.
+        // Usage: Central point of the fleet, used as a base.
+        Freighter
+        // Features: High cargo capacity.
+        // Usage: Resource collection, trade.
     }
 }

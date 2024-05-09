@@ -8,21 +8,6 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        /*
-        // Creating a list of crew members
-        List<Crew> crews = new List<Crew>
-        {
-            new Crew("Captain", 1),
-            new Crew("Engineer", 5),
-            new Crew("Pilot", 2)
-        };
-
-        // Creating a new spaceship object
-        SpaceShip spaceShip = new SpaceShip("F16", "Fighter", crews, 100, 100, 100, 100, 100, "Attack");
-
-        // Displaying information about the spaceship
-        spaceShip.DisplaySpaceShipInfo();
-        */
         Game game = new Game();
         game.InitializeGame();
         game.RunGameLoop();
@@ -35,8 +20,48 @@ public class Game
     {
         return new List<SpaceShip>
     {
-        new SpaceShip("Explorer I", "Explorer", new List<Crew>(), 120, 500, 300, 80, 100,"", 200),
-        new SpaceShip("Vanguard", "Fighter", new List<Crew>(), 150, 300, 150, 150, 200,"", 300),
+        new SpaceShip("Falcon Scout", "Scout", "Fast, low fuel consumption, weak armor", new List<Crew>(), 900, 1200, 10, 25, 10, "", 15000),
+        new SpaceShip("Viper Probe", "Scout", "Fast and quiet, advanced sensors", new List<Crew>(), 1100, 900, 8, 20, 8, "", 17000),
+        new SpaceShip("Raven Scout", "Scout", "Fast, low radar profile, limited weapon capacity", new List<Crew>(), 950, 1100, 15, 22, 9, "", 18500),
+        new SpaceShip("Swift Talon", "Scout", "Agile, short-range, basic scanning equipment", new List<Crew>(), 1000, 1000, 12, 24, 10, "", 16000),
+        new SpaceShip("Comet Runner", "Scout", "Lightweight, long-range, automatic escape module", new List<Crew>(), 1200, 900, 7, 18, 6, "", 19000),
+
+        new SpaceShip("Phoenix Wing", "Fighter", "Strong attack, medium armor, short-range", new List<Crew>(), 800, 1500, 20, 80, 45, "", 25000),
+        new SpaceShip("Iron Claw", "Fighter", "Strong attack and armor, limited maneuverability", new List<Crew>(), 750, 2000, 25, 100, 50, "", 28000),
+        new SpaceShip("Red Falcon", "Fighter", "Fast attack, low defense, heavy weapons", new List<Crew>(), 850, 1800, 15, 85, 40, "", 26000),
+        new SpaceShip("Thunder Fist", "Fighter", "Balanced attack and defense, advanced sensors", new List<Crew>(), 700, 1600, 18, 90, 48, "", 24500),
+        new SpaceShip("Stormstrike", "Fighter", "High attack power, medium armor, heavy guns", new List<Crew>(), 780, 1700, 22, 95, 47, "", 27000),
+
+        new SpaceShip("Stormbringer", "Frigate", "Balanced attack and defense, medium-range", new List<Crew>(), 600, 3500, 50, 150, 75, "", 45000),
+        new SpaceShip("Vanguard", "Frigate", "High armor, advanced sensors, long-range", new List<Crew>(), 580, 4000, 55, 140, 85, "", 48000),
+        new SpaceShip("Defender", "Frigate", "High defense, energy weapons", new List<Crew>(), 550, 4500, 60, 130, 90, "", 50000),
+        new SpaceShip("Nightwatch", "Frigate", "Stealth operations capable, high radar stealth", new List<Crew>(), 620, 3800, 45, 160, 70, "", 46500),
+        new SpaceShip("Sentinel", "Frigate", "Medium attack, strong armor, heavy missile capacity", new List<Crew>(), 590, 3900, 52, 145, 78, "", 47500),
+
+        new SpaceShip("Titan Breaker", "Destroyer", "High attack, medium armor, wide missile capacity", new List<Crew>(), 500, 6000, 80, 250, 120, "", 75000),
+        new SpaceShip("Obliterator", "Destroyer", "Intense attack, weak armor, long-range", new List<Crew>(), 520, 5500, 85, 280, 115, "", 78500),
+        new SpaceShip("Maelstrom", "Destroyer", "Strong attack and defense, limited speed", new List<Crew>(), 480, 6200, 90, 240, 125, "", 72000),
+        new SpaceShip("Doom Hammer", "Destroyer", "Strong energy weapons, heavy armor", new List<Crew>(), 490, 6500, 78, 270, 110, "", 79500),
+        new SpaceShip("Thunderstorm", "Destroyer", "Balanced attack and defense, automated drone defense", new List<Crew>(), 510, 5800, 75, 260, 118, "", 74500),
+
+        new SpaceShip("Solaris", "Cruiser", "Strong attack and defense, advanced sensors", new List<Crew>(), 400, 8000, 150, 450, 250, "", 120000),
+        new SpaceShip("Star Galleon", "Cruiser", "Durable armor, automatic drone defense", new List<Crew>(), 420, 8500, 160, 420, 240, "", 122000),
+        new SpaceShip("Galactic Horn", "Cruiser", "High attack capacity, short-range", new List<Crew>(), 430, 8200, 140, 460, 245, "", 124000),
+        new SpaceShip("Vortex", "Cruiser", "Balanced attack, advanced missile launchers", new List<Crew>(), 410, 8300, 155, 440, 230, "", 119500),
+        new SpaceShip("Nebula Guard", "Cruiser", "Intense defense, medium attack, long-range", new List<Crew>(), 390, 7900, 148, 430, 255, "", 121000),
+
+        new SpaceShip("Fortress Max", "Capital Ship", "Strong defense, major fleet command center", new List<Crew>(), 300, 12000, 300, 600, 450, "", 250000),
+        new SpaceShip("Leviathan", "Capital Ship", "Extremely durable armor, advanced missile defense", new List<Crew>(), 320, 13000, 350, 580, 460, "", 255000),
+        new SpaceShip("Star Fortress", "Capital Ship", "Central base, balanced attack and defense", new List<Crew>(), 310, 12500, 310, 590, 440, "", 248000),
+        new SpaceShip("Titan Citadel", "Capital Ship", "Large defensive walls, energy weapons", new List<Crew>(), 290, 14000, 280, 620, 470, "", 260000),
+        new SpaceShip("Command Hub", "Capital Ship", "Fleet command and control center, automated defense", new List<Crew>(), 310, 13500, 330, 610, 480, "", 252000),
+
+        new SpaceShip("Horizon", "Freighter", "Large cargo capacity, low defense", new List<Crew>(), 250, 9000, 400, 150, 100, "", 80000),
+        new SpaceShip("Cargo Whale", "Freighter", "Large cargo capacity, durable armor", new List<Crew>(), 230, 10000, 450, 140, 110, "", 82000),
+        new SpaceShip("Trade Wind", "Freighter", "Fast, medium cargo capacity", new List<Crew>(), 260, 8500, 370, 160, 95, "", 78500),
+        new SpaceShip("Merchant", "Freighter", "Balanced transport, advanced radar", new List<Crew>(), 240, 9500, 420, 155, 105, "", 81500),
+        new SpaceShip("Hauler", "Freighter", "Large cargo capacity, automated defense", new List<Crew>(), 245, 9800, 430, 145, 108, "", 83000)
+
         // Add more predefined ships with different attributes and costs
     };
     }
