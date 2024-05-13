@@ -23,6 +23,9 @@ namespace Galaxy
         public string? FleetName { get; set; } = null; // bunu fleet diye obje oluştur
         public int Cost { get; set; }  // Cost in gold
 
+        public override string ToString() => $"{Type} - {Name}";
+
+
         // Constructor
         public SpaceShip(string name, string type, string description, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
         {
