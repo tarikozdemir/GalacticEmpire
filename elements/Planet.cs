@@ -18,14 +18,13 @@ namespace Galaxy
 
         public override string ToString() => $"{Name} - {Position}";
 
-        public Planet(string name, Vector2 position, List<Resource> resources, List<StrategicAdvantage> strategicAdvantages, int resourceCapacity, ConsoleColor color)
+        public Planet(string name, Vector2 position, List<Resource> resources, List<StrategicAdvantage> strategicAdvantages, int resourceCapacity)
         {
             Name = name;
             Position = position;
             Resources = resources;
             StrategicAdvantage = strategicAdvantages;
             ResourceCapacity = resourceCapacity;
-            Color = color;
         }
 
         public Planet(string v, Vector2 position)
@@ -46,81 +45,66 @@ namespace Galaxy
                     position: new Vector2(2, 3),
                     resources: new List<Resource> { new Resource(), new Resource() }, // Burada özel kaynak sınıflarını kullanabilirsiniz
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 5000,
-                    color: ConsoleColor.Cyan
+                    resourceCapacity: 5000
                 ),
                 new Planet(
                     name: "Zynthara",
                     position: new Vector2(5, 1),
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 3000,
-                    color: ConsoleColor.Yellow
+                    resourceCapacity: 3000
                 ),
                 new Planet(
                     name: "Erebus Prime",
                     position: new Vector2(4, 6),
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 7000,
-                    color: ConsoleColor.DarkMagenta
+                    resourceCapacity: 7000
                 ),
                 new Planet(
                     name: "Tarragon",
                     position: new Vector2(1, 7),
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 4000,
-                    color: ConsoleColor.Blue
+                    resourceCapacity: 4000
                 ),
                 new Planet(
                     name: "Calypsis",
                     position: new Vector2(3, 2),
                     resources: new List<Resource> { new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 6000,
-                    color: ConsoleColor.Red
+                    resourceCapacity: 6000
                 ),
                 new Planet(
                     name: "Aurelios",
                     position: new Vector2(2, 5),
                     resources: new List<Resource> { new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 3500,
-                    color: ConsoleColor.Green
-                ),
+                    resourceCapacity: 3500                ),
                 new Planet(
                     name: "Nemorath",
                     position: new Vector2(7, 3),
                     resources: new List<Resource> { new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 8000,
-                    color: ConsoleColor.White
-                ),
+                    resourceCapacity: 8000                ),
                 new Planet(
                     name: "Zephyros",
                     position: new Vector2(0, 4),
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 5500,
-                    color: ConsoleColor.Magenta
-                ),
+                    resourceCapacity: 5500                ),
                 new Planet(
                     name: "Orphidia",
                     position: new Vector2(6, 8),
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 6500,
-                    color: ConsoleColor.DarkRed
-                ),
+                    resourceCapacity: 6500                ),
                 new Planet(
                     name: "Draconis",
                     position: new Vector2(8, 2),
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
-                    resourceCapacity: 7000,
-                    color: ConsoleColor.Gray
-                )
+                    resourceCapacity: 7000                )
             };
         }
     }
