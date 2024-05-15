@@ -147,19 +147,19 @@ public class Game
     private int AskPlayerCount()
     {
         return AnsiConsole.Prompt(
-        new TextPrompt<int>("How many players will play the game?")
-        .DefaultValue(2)
-        .PromptStyle("green")
-        .ValidationErrorMessage("[red]That's not a valid count[/]")
-        .Validate(age =>
-        {
-            return age switch
+            new TextPrompt<int>("How many players will play the game?")
+            .DefaultValue(2)
+            .PromptStyle("green")
+            .ValidationErrorMessage("[red]That's not a valid count[/]")
+            .Validate(age =>
             {
-                <= 1 => ValidationResult.Error("[red]There must at least be 2 players[/]"),
-                >= 6 => ValidationResult.Error("[red]There must at most be 5 players[/]"),
-                _ => ValidationResult.Success(),
-            };
-        }));
+                return age switch
+                {
+                    <= 1 => ValidationResult.Error("[red]There must at least be 2 players[/]"),
+                    >= 6 => ValidationResult.Error("[red]There must at most be 5 players[/]"),
+                    _ => ValidationResult.Success(),
+                };
+            }));
     }
 
     public void RunGameLoop()
