@@ -10,7 +10,7 @@ namespace Galaxy
     {
         // Properties
         public string? Name { get; set; }
-        public string? Type { get; set; }
+        public SpaceShipType Type { get; set; }
         // Different types of ships (warships, trade ships, exploration ships, etc.)
         public string? Description { get; set; }
 
@@ -27,7 +27,7 @@ namespace Galaxy
 
 
         // Constructor
-        public SpaceShip(string name, string type, string description, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
+        public SpaceShip(string name, SpaceShipType type, string description, List<Crew> crews, int maxSpeed, int fuelCapacity, int cargoCapacity, int firePower, int shieldStrength, string fleetName, int cost)
         {
             Name = name;
             Type = type;
