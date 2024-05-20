@@ -9,7 +9,7 @@ namespace Galaxy
         public List<SpaceShip> Ships { get; } = new List<SpaceShip>();
         public int Speed => Ships.Count > 0 ? Ships.Min(s => s.MaxSpeed) : 0;
 
-        public Fleet(IEnumerable<SpaceShip> ships)
+        public Fleet(List<SpaceShip> ships)
         {
             Ships.AddRange(ships);
         }

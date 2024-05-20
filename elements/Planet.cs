@@ -47,7 +47,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource(), new Resource() }, // Burada özel kaynak sınıflarını kullanabilirsiniz
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 5000,
-                    color: ConsoleColor.Cyan
                 ),
                 new Planet(
                     name: "Zynthara",
@@ -55,7 +54,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 3000,
-                    color: ConsoleColor.Yellow
                 ),
                 new Planet(
                     name: "Erebus Prime",
@@ -63,7 +61,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 7000,
-                    color: ConsoleColor.DarkMagenta
                 ),
                 new Planet(
                     name: "Tarragon",
@@ -71,7 +68,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 4000,
-                    color: ConsoleColor.Blue
                 ),
                 new Planet(
                     name: "Calypsis",
@@ -79,7 +75,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 6000,
-                    color: ConsoleColor.Red
                 ),
                 new Planet(
                     name: "Aurelios",
@@ -87,7 +82,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 3500,
-                    color: ConsoleColor.Green
                 ),
                 new Planet(
                     name: "Nemorath",
@@ -95,7 +89,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 8000,
-                    color: ConsoleColor.White
                 ),
                 new Planet(
                     name: "Zephyros",
@@ -103,7 +96,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 5500,
-                    color: ConsoleColor.Magenta
                 ),
                 new Planet(
                     name: "Orphidia",
@@ -111,7 +103,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 6500,
-                    color: ConsoleColor.DarkRed
                 ),
                 new Planet(
                     name: "Draconis",
@@ -119,7 +110,6 @@ namespace Galaxy
                     resources: new List<Resource> { new Resource(), new Resource() },
                     strategicAdvantages: new List<StrategicAdvantage> { new StrategicAdvantage() },
                     resourceCapacity: 7000,
-                    color: ConsoleColor.Gray
                 )
             };
         }
