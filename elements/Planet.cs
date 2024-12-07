@@ -18,7 +18,9 @@ namespace Galaxy
 
         public override string ToString() => $"{Name} - {Position}";
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public Planet(string name, Vector2 position, List<Resource> resources, List<StrategicAdvantage> strategicAdvantages, int resourceCapacity)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
             Name = name;
             Position = position;

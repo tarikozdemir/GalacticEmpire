@@ -147,7 +147,7 @@ public class Game
     private int AskPlayerCount()
     {
         return AnsiConsole.Prompt(
-            new TextPrompt<int>("How many players will play the game?")
+            new TextPrompt<int>("How many players will play the game? Default: ")
             .DefaultValue(2)
             .PromptStyle("green")
             .ValidationErrorMessage("[red]That's not a valid count[/]")
